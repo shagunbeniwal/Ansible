@@ -30,7 +30,7 @@
     shell: usermod -g teacher fred
 
 
-  - name: Check if systemstat.sh exists?
+  - name: Check if info_ssh.php exists?
     stat:
       path: /var/www/html/info_ssh.php
     register: stat_result
