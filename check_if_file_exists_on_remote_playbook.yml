@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: sudo
+  gather_facts: yes
+  remote_user: root
+
+  tasks:
+  - name: Check if systemstat.sh exists?
+    stat:
+      path: /var/www/html/info_ssh.php
+    register: stat_result
+
+  - name: If file found then copy the file to /home/mike/
+    shell: cp /var/www/html/info_ssh.php /root/
+    when: stat_result.stat.exists == True
+

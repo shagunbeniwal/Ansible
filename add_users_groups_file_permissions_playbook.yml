@@ -1,0 +1,50 @@
+---
+- hosts: all
+  become: sudo
+  gather_facts: no
+
+  tasks:
+
+  - name: make user Fred
+    shell: useradd -d /home/fred -m fred
+
+  - name: make user Barney
+    shell: useradd -d /home/barney -m barney
+
+  - name: give password to user fred
+    shell: echo -e "qwerty\nqwerty" | (passwd fred)
+
+  - name: give password to user barney
+    shell: echo -e "qwerty\nqwerty" | (passwd barney)
+
+  - name: make group teacher
+    shell: groupadd teacher
+
+  - name: make group sysadmin
+    shell: groupadd sysadmin
+
+  - name: Barney is a sysadmin so adding barney to sysadmin
+    shell: usermod -g sysadmin barney
+
+  - name: Fred is a teacher so adding fred to teacher
+    shell: usermod -g teacher fred
+
+
+  - name: Check if systemstat.sh exists?
+    stat:
+      path: /var/www/html/info_ssh.php
+    register: stat_result
+
+  - name: If file found then copy the file to fred's home dir
+    shell: cp /var/www/html/info_ssh.php /home/fred/ 
+    when: stat_result.stat.exists == True
+
+  - name: Giving permissions to the file
+    file:
+      path: /home/fred/info_ssh.php
+      mode: 0700
+      owner: fred 
+      group: teacher 
+    when: stat_result.stat.exists == True
+    
+

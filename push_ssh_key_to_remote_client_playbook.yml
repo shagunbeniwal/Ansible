@@ -1,0 +1,12 @@
+---
+- hosts: web
+  become: sudo
+  gather_facts: yes
+  remote_user: root
+
+  tasks:
+
+  - name: install ssh key
+    authorized_key: user=root 
+                    key="{{ lookup('file', '/root/.ssh/id_rsa.pub') }}" 
+                    state=present

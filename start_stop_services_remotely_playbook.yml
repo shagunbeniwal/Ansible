@@ -1,0 +1,18 @@
+---
+- hosts: all
+  become: sudo
+  gather_facts: no
+
+  tasks:
+
+  - name: stop rdma
+    service: name=rdma state=stopped
+
+  - name: start iptables
+    service: name=iptables state=started
+
+  - name: stop httpd
+    service: name=httpd state=stopped
+
+
+ 
